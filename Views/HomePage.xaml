@@ -2,8 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:helpers="clr-namespace:FinanceApp.Helpers"
+             xmlns:viewmodels="clr-namespace:FinanceApp.ViewModels"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewmodels:HomePageViewModel"
              x:Class="FinanceApp.Views.HomePage"
              BackgroundColor="#E6E7E8">
 

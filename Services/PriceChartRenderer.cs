@@ -1,6 +1,8 @@
 ﻿using FinanceApp.Helpers;
+using FinanceApp.Models;
 using FinanceApp.ViewModels;
 using SkiaSharp;
+using static FinanceApp.Helpers.Enums;
 
 namespace FinanceApp.Services.Charting;
 

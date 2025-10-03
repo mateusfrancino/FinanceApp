@@ -2,19 +2,12 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using FinanceApp.Models;
 using FinanceApp.Services;
 using SkiaSharp;
+using static FinanceApp.Helpers.Enums;
 
 namespace FinanceApp.ViewModels;
-
-public class SeriesData
-{
-    public double[] Points { get; set; } = Array.Empty<double>();
-    public SKColor Color { get; set; }                             
-    public float Stroke { get; set; } = 2f;                         
-}
-
-public enum LineStyle { Solid, Dashed, Dotted }
 
 public class HomePageViewModel : INotifyPropertyChanged
 {
@@ -57,8 +50,7 @@ public class HomePageViewModel : INotifyPropertyChanged
 
     private string _selectedColorHex = "#4682B4"; 
     public string SelectedColorHex { get => _selectedColorHex; set { _selectedColorHex = value; Raise(); } }
-
-
+  
     public ICommand SetColorCommand => new Command<string>(hex =>
     {
         if (string.IsNullOrWhiteSpace(hex)) return;
