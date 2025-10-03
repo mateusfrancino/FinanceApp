@@ -1,4 +1,4 @@
-﻿using MeuClienteApp.Views;
+﻿using FinanceApp.Views;
 
 #if WINDOWS
 using Microsoft.Maui.Platform;
@@ -6,7 +6,7 @@ using Microsoft.UI.Windowing;
 using WinRT.Interop;
 #endif
 
-namespace MeuClienteApp
+namespace FinanceApp
 {
     public partial class App : Application
     {

@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace MeuClienteApp
+namespace FinanceApp
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

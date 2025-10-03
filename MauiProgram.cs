@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;      
-using Mopups.Hosting;              
-using MeuClienteApp.Services;
-using MeuClienteApp.ViewModels;
-using MeuClienteApp.Views;
-using MeuClienteApp.Views.Mopups;
+﻿using CommunityToolkit.Maui;
+using FinanceApp.Services;
+using FinanceApp.Services.Charting;
+using FinanceApp.ViewModels;
+using FinanceApp.Views;
+using Microsoft.Extensions.Logging;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
-namespace MeuClienteApp
+namespace FinanceApp
 {
     public static class MauiProgram
     {
@@ -16,9 +16,9 @@ namespace MeuClienteApp
 
             builder
                 .UseMauiApp<App>()
-                .UseMauiCommunityToolkit()   
-                .ConfigureMopups()           
-                .ConfigureFonts(fonts =>
+                .UseMauiCommunityToolkit()
+				.UseSkiaSharp()
+				.ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
@@ -28,12 +28,11 @@ namespace MeuClienteApp
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+			builder.Services.AddSingleton<IPricePathSimulator, BrownianSimulator>();
+			builder.Services.AddSingleton<IPriceChartRenderer, PriceChartRenderer>();
 
-            builder.Services.AddSingleton<ICustomerService, CustomerService>();
-            builder.Services.AddTransient<HomePageViewModel>();
+			builder.Services.AddTransient<HomePageViewModel>();
             builder.Services.AddTransient<HomePage>();
-            builder.Services.AddTransient<AddEditCustomerViewModel>();
-            builder.Services.AddTransient<AddEditCustomerPopup>();
 
             return builder.Build();
         }

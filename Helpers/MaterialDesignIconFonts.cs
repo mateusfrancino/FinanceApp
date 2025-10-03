@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MeuClienteApp.Helpers
+namespace FinanceApp.Helpers
 {
     static class MaterialDesignIconFonts
     {

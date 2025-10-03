@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:helpers="clr-namespace:MeuClienteApp.Helpers"
-             x:Class="MeuClienteApp.Views.HomePage"
+             xmlns:helpers="clr-namespace:FinanceApp.Helpers"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="FinanceApp.Views.HomePage"
              BackgroundColor="#E6E7E8">
+
+    <ContentPage.Resources>
+        <Style x:Key="Field" TargetType="Grid">
+            <Setter Property="RowDefinitions" Value="Auto,Auto,Auto"/>
+            <Setter Property="RowSpacing" Value="2"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style x:Key="Caption" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextColor" Value="#555"/>
+        </Style>
+        <Style x:Key="Help" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        </Style>
+    </ContentPage.Resources>
+
+
 
     <Grid>
         <Grid>
@@ -26,12 +47,9 @@
                             <RowDefinition Height="30*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="55*"/>
-                            <ColumnDefinition Width="10*"/>
-                            <ColumnDefinition Width="35*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2"
+                        <Border Grid.Row="0" Grid.RowSpan="2" 
                                 Background="Transparent" Stroke="Transparent" Padding="0" Margin="10">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="20"/>
@@ -39,9 +57,9 @@
 
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="15*"/>
-                                    <RowDefinition Height="70*"/>
-                                    <RowDefinition Height="15*"/>
+                                    <RowDefinition Height="10*"/>
+                                    <RowDefinition Height="85*"/>
+                                    <RowDefinition Height="5*"/>
                                 </Grid.RowDefinitions>
 
                                 <!-- Header -->
@@ -57,194 +75,245 @@
                                                HeightRequest="52" WidthRequest="142"
                                                Margin="0,1,0,0" Aspect="AspectFit"
                                                HorizontalOptions="Start" VerticalOptions="Start"/>
-
-                                        <Border Grid.Column="2" Background="#1857ae" Stroke="White"
-                                                Padding="0" Margin="0" HorizontalOptions="End" VerticalOptions="End"
-                                                WidthRequest="311" HeightRequest="29">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="5"/>
-                                            </Border.StrokeShape>
-                                            <Label Text="Clientes Cadastrados" FontSize="16"
-                                                   TextColor="White" FontFamily="OpenSansRegular"
-                                                   HorizontalOptions="Center" VerticalOptions="Center"/>
-                                        </Border>
                                     </Grid>
                                 </Border>
 
-                                <!-- LISTA -->
-                                <Border Grid.Row="1" Background="Transparent" Stroke="Transparent" Padding="0" Margin="10,0,11,1"
-                                        VerticalOptions="Fill" HorizontalOptions="Fill">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
+                                <!--Conteudo-->
+                                <Grid Grid.Row="1" Padding="0" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
 
-                                        <!-- Cabeçalho fixo -->
-                                        <Grid Grid.Row="0" BackgroundColor="#f9f9fb" HeightRequest="40" Padding="10,0" Margin="0,0,0,2">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="1*"/>
-                                                <ColumnDefinition Width="1*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="2*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Text="Nome" VerticalTextAlignment="Center" FontFamily="OpenSansSemibold"/>
-                                            <Label Grid.Column="1" Text="Sobrenome" VerticalTextAlignment="Center" FontFamily="OpenSansSemibold"/>
-                                            <Label Grid.Column="2" Text="Idade" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontFamily="OpenSansSemibold"/>
-                                            <Label Grid.Column="3" Text="Endereço" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontFamily="OpenSansSemibold"/>
+                                    <FlexLayout Grid.Row="0"
+                                                Direction="Row"
+                                                Wrap="Wrap"
+                                                JustifyContent="Start"
+                                                AlignItems="Center"
+                                                Margin="0,0,0,10">
+
+                                        <!-- Preço inicial -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="160">
+                                            <Label Grid.Row="0" Text="Preço inicial" Style="{StaticResource Caption}"/>
+                                            <Entry Grid.Row="1" Text="{Binding InitialPrice}" Keyboard="Numeric" VerticalOptions="Center"/>
+                                            <Label Grid.Row="2" Text="" />
                                         </Grid>
 
-                                        <!-- Conteúdo -->
-                                        <Border Grid.Row="1" Background="White" Stroke="#C7CBD0" Padding="0" Margin="0">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="6"/>
-                                            </Border.StrokeShape>
+                                        <!-- Volatilidade -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="200">
+                                            <Label Grid.Row="0" Text="Volatilidade (σ)" Style="{StaticResource Caption}"/>
+                                            <Slider Grid.Row="1" Minimum="0.01" Maximum="0.6" Value="{Binding Vol}" VerticalOptions="Center"/>
+                                            <Label  Grid.Row="2" Text="{Binding Vol, StringFormat='σ={0:F2}'}" Style="{StaticResource Help}"/>
+                                        </Grid>
 
-                                            <CollectionView ItemsSource="{Binding Customers}"
-                                                            SelectionMode="Single"
-                                                            SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}">
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid Padding="10" ColumnSpacing="8">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="1*"/>
-                                                                <ColumnDefinition Width="1*"/>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                                <ColumnDefinition Width="2*"/>
-                                                            </Grid.ColumnDefinitions>
+                                        <!-- Média -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="200">
+                                            <Label Grid.Row="0" Text="Média (μ)" Style="{StaticResource Caption}"/>
+                                            <Slider Grid.Row="1" Minimum="-0.05" Maximum="0.10" Value="{Binding Mean}" VerticalOptions="Center"/>
+                                            <Label  Grid.Row="2" Text="{Binding Mean, StringFormat='μ={0:F3}'}" Style="{StaticResource Help}"/>
+                                        </Grid>
 
-                                                            <Label Text="{Binding Name}" VerticalTextAlignment="Center" TextColor="#001861"/>
-                                                            <Label Grid.Column="1" Text="{Binding Lastname}" VerticalTextAlignment="Center" TextColor="#001861"/>
-                                                            <Label Grid.Column="2" Text="{Binding Age}" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="#001861"/>
-                                                            <Label Grid.Column="3" Text="{Binding Address}" LineBreakMode="TailTruncation" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextColor="#001861"/>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
-                                        </Border>
-                                    </Grid>
-                                </Border>
+                                        <!-- Dias (valor ao lado do Stepper) -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="130">
+                                            <Label Grid.Row="0" Text="Dias" Style="{StaticResource Caption}"/>
+                                            <HorizontalStackLayout Grid.Row="1" Spacing="8" VerticalOptions="Center">
+                                                <Stepper Minimum="10" Maximum="2000" Increment="10" Value="{Binding NumDays}" />
+                                                <Label Text="{Binding NumDays}" VerticalTextAlignment="Center"/>
+                                            </HorizontalStackLayout>
+                                            <Label Grid.Row="2" Text="" />
+                                        </Grid>
 
-                                <!-- Rodapé decorativo -->
-                                <Border Grid.Row="2" Background="Transparent" Stroke="Transparent" Padding="0" Margin="10,1,10,10">
+                                        <!-- Simulações (valor ao lado do Stepper) -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="100">
+                                            <Label Grid.Row="0" Text="Simulações" Style="{StaticResource Caption}"/>
+                                            <HorizontalStackLayout Grid.Row="1" Spacing="8" VerticalOptions="Center">
+                                                <Stepper Minimum="1" Maximum="8" Increment="1" Value="{Binding Simulations}" />
+                                                <Label Text="{Binding Simulations}" VerticalTextAlignment="Center"/>
+                                            </HorizontalStackLayout>
+                                            <Label Grid.Row="2" Text="" />
+                                        </Grid>
+
+                                        <!-- Espessura -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="200">
+                                            <Label Grid.Row="0" Text="Espessura" Style="{StaticResource Caption}"/>
+                                            <Slider Grid.Row="1" Minimum="1" Maximum="5" Value="{Binding StrokeWidth}" VerticalOptions="Center"/>
+                                            <Label Grid.Row="2" Text="{Binding StrokeWidth, StringFormat='{0:0}'}" Style="{StaticResource Help}"/>
+                                        </Grid>
+
+                                        <!-- Normalizar (checkbox + texto lado a lado) -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="220">
+                                            <Label Grid.Row="0" Text=" " />
+                                            <HorizontalStackLayout Grid.Row="1" Spacing="4" VerticalOptions="Center">
+                                                <CheckBox IsChecked="{Binding Normalize}" />
+                                                <Label Text="Normalizar (base=1.0)" VerticalTextAlignment="Center"/>
+                                            </HorizontalStackLayout>
+                                            <Label Grid.Row="2" Text=" " />
+                                        </Grid>
+
+                                        <!-- Cor (swatches + "cor unica") -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="200">
+                                            <Label Grid.Row="0" Text="Cor" Style="{StaticResource Caption}"/>
+
+                                            <FlexLayout Grid.Row="1" Direction="Row" Wrap="NoWrap" AlignItems="Center">
+                                                <!-- Azul -->
+                                                <Border Stroke="#00000000" StrokeThickness="1" Margin="2" Padding="0">
+                                                    <Border.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding SelectedColorHex}" Value="#4682B4">
+                                                            <Setter Property="Stroke" Value="#5B4EEB"/>
+                                                            <Setter Property="StrokeThickness" Value="2"/>
+                                                        </DataTrigger>
+                                                    </Border.Triggers>
+                                                    <Grid>
+                                                        <BoxView WidthRequest="22" HeightRequest="22" Color="#4682B4"/>
+                                                        <Label Text="✓" FontSize="10" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="False">
+                                                            <Label.Triggers>
+                                                                <DataTrigger TargetType="Label" Binding="{Binding SelectedColorHex}" Value="#4682B4">
+                                                                    <Setter Property="IsVisible" Value="True"/>
+                                                                </DataTrigger>
+                                                            </Label.Triggers>
+                                                        </Label>
+                                                    </Grid>
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SetColorCommand}" CommandParameter="#4682B4"/>
+                                                    </Border.GestureRecognizers>
+                                                </Border>
+
+                                                <!-- Vermelho -->
+                                                <Border Stroke="#00000000" StrokeThickness="1" Margin="2" Padding="0">
+                                                    <Border.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding SelectedColorHex}" Value="#C45850">
+                                                            <Setter Property="Stroke" Value="#5B4EEB"/>
+                                                            <Setter Property="StrokeThickness" Value="2"/>
+                                                        </DataTrigger>
+                                                    </Border.Triggers>
+                                                    <Grid>
+                                                        <BoxView WidthRequest="22" HeightRequest="22" Color="#C45850"/>
+                                                        <Label Text="✓" FontSize="10" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="False">
+                                                            <Label.Triggers>
+                                                                <DataTrigger TargetType="Label" Binding="{Binding SelectedColorHex}" Value="#C45850">
+                                                                    <Setter Property="IsVisible" Value="True"/>
+                                                                </DataTrigger>
+                                                            </Label.Triggers>
+                                                        </Label>
+                                                    </Grid>
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SetColorCommand}" CommandParameter="#C45850"/>
+                                                    </Border.GestureRecognizers>
+                                                </Border>
+
+                                                <!-- Verde -->
+                                                <Border Stroke="#00000000" StrokeThickness="1" Margin="2" Padding="0">
+                                                    <Border.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding SelectedColorHex}" Value="#2E8B57">
+                                                            <Setter Property="Stroke" Value="#5B4EEB"/>
+                                                            <Setter Property="StrokeThickness" Value="2"/>
+                                                        </DataTrigger>
+                                                    </Border.Triggers>
+                                                    <Grid>
+                                                        <BoxView WidthRequest="22" HeightRequest="22" Color="#2E8B57"/>
+                                                        <Label Text="✓" FontSize="10" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="False">
+                                                            <Label.Triggers>
+                                                                <DataTrigger TargetType="Label" Binding="{Binding SelectedColorHex}" Value="#2E8B57">
+                                                                    <Setter Property="IsVisible" Value="True"/>
+                                                                </DataTrigger>
+                                                            </Label.Triggers>
+                                                        </Label>
+                                                    </Grid>
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SetColorCommand}" CommandParameter="#2E8B57"/>
+                                                    </Border.GestureRecognizers>
+                                                </Border>
+
+                                                <!-- Roxo -->
+                                                <Border Stroke="#00000000" StrokeThickness="1" Margin="2" Padding="0">
+                                                    <Border.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding SelectedColorHex}" Value="#6A5ACD">
+                                                            <Setter Property="Stroke" Value="#5B4EEB"/>
+                                                            <Setter Property="StrokeThickness" Value="2"/>
+                                                        </DataTrigger>
+                                                    </Border.Triggers>
+                                                    <Grid>
+                                                        <BoxView WidthRequest="22" HeightRequest="22" Color="#6A5ACD"/>
+                                                        <Label Text="✓" FontSize="10" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="False">
+                                                            <Label.Triggers>
+                                                                <DataTrigger TargetType="Label" Binding="{Binding SelectedColorHex}" Value="#6A5ACD">
+                                                                    <Setter Property="IsVisible" Value="True"/>
+                                                                </DataTrigger>
+                                                            </Label.Triggers>
+                                                        </Label>
+                                                    </Grid>
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SetColorCommand}" CommandParameter="#6A5ACD"/>
+                                                    </Border.GestureRecognizers>
+                                                </Border>
+
+                                                <!-- Dourado -->
+                                                <Border Stroke="#00000000" StrokeThickness="1" Margin="2" Padding="0">
+                                                    <Border.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding SelectedColorHex}" Value="#DAA520">
+                                                            <Setter Property="Stroke" Value="#5B4EEB"/>
+                                                            <Setter Property="StrokeThickness" Value="2"/>
+                                                        </DataTrigger>
+                                                    </Border.Triggers>
+                                                    <Grid>
+                                                        <BoxView WidthRequest="22" HeightRequest="22" Color="#DAA520"/>
+                                                        <Label Text="✓" FontSize="10" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="False">
+                                                            <Label.Triggers>
+                                                                <DataTrigger TargetType="Label" Binding="{Binding SelectedColorHex}" Value="#DAA520">
+                                                                    <Setter Property="IsVisible" Value="True"/>
+                                                                </DataTrigger>
+                                                            </Label.Triggers>
+                                                        </Label>
+                                                    </Grid>
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SetColorCommand}" CommandParameter="#DAA520"/>
+                                                    </Border.GestureRecognizers>
+                                                </Border>
+                                            </FlexLayout>
+
+                                            <HorizontalStackLayout Grid.Row="2" Spacing="4" VerticalOptions="Center">
+                                                <CheckBox IsChecked="{Binding ApplyColorToAll}" />
+                                                <Label Text="Cor única p/ todas" VerticalTextAlignment="Center"/>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+
+                                        <!-- Estilo -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="110">
+                                            <Label Grid.Row="0" Text="Estilo" Style="{StaticResource Caption}"/>
+                                            <Picker Grid.Row="1" ItemsSource="{Binding LineStyles}" SelectedItem="{Binding SelectedStyle}" VerticalOptions="Center"/>
+                                            <Label Grid.Row="2" Text="" />
+                                        </Grid>
+
+                                        <!-- Botão -->
+                                        <Grid Style="{StaticResource Field}" FlexLayout.Basis="180">
+                                            <Label Grid.Row="0" Text="" />
+                                            <Button Grid.Row="1" Text="Simular" Command="{Binding SimulateCommand}" HeightRequest="42" />
+                                            <Label Grid.Row="2" Text="" />
+                                        </Grid>
+
+                                    </FlexLayout>
+
+                                    <!-- Gráfico -->
+                                    <skia:SKCanvasView Grid.Row="1" x:Name="Canvas" PaintSurface="OnCanvasPaintSurface" />
+
+                                    <HorizontalStackLayout Grid.Row="2" Spacing="12" Margin="4,15,0,0">
+                                        <Label Text="Legenda:" FontAttributes="Bold"/>
+                                        <Label Text="Séries coloridas por paleta automática ou pela cor escolhida" FontSize="12" Margin="0,2,0,0"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                              
+                                <!-- Img decorativo -->
+                                <Border Grid.Row="2" Background="Transparent" Stroke="Transparent">
                                     <Image Source="rodape_paginas_invertido.png"
-                                           Aspect="Fill" Margin="0,26,2,0"
+                                           Aspect="Fill" Margin="0,20,0,0"
                                            HeightRequest="2" VerticalOptions="Start"/>
                                 </Border>
-                            </Grid>
-                        </Border>
-
-                        <!-- (dados do cliente) -->
-                        <Border Grid.Row="0" Grid.Column="2"
-                                Background="Transparent" Stroke="Transparent" Padding="0" Margin="10,50,10,10">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="20"/>
-                            </Border.StrokeShape>
-
-                            <Grid VerticalOptions="Start" Margin="10,50,10,0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Label Grid.Row="0" Grid.ColumnSpan="2"
-                                       Text="~      Dados Cliente      ~"
-                                       FontSize="14" FontFamily="OpenSansRegular"
-                                       TextColor="#666D82"
-                                       HorizontalOptions="Center" />
-
-                                <Label Grid.Row="1" Grid.Column="0"
-                                       Text="Nome" FontSize="12" TextColor="#6E77A0"
-                                       FontFamily="OpenSansSemibold" Margin="0,8,12,0"/>
-                                <Label Grid.Row="1" Grid.Column="1"
-                                       Text="{Binding SelectedCustomer.Name}"
-                                       FontSize="14" FontFamily="OpenSansRegular" TextColor="#001861"/>
-
-                                <Label Grid.Row="2" Grid.Column="0"
-                                       Text="Sobrenome" FontSize="12" TextColor="#6E77A0"
-                                       FontFamily="OpenSansSemibold" Margin="0,8,12,0"/>
-                                <Label Grid.Row="2" Grid.Column="1"
-                                       Text="{Binding SelectedCustomer.Lastname}"
-                                       FontSize="14" FontFamily="OpenSansRegular" TextColor="#001861"/>
-
-                                <Label Grid.Row="3" Grid.Column="0"
-                                       Text="Idade" FontSize="12" TextColor="#6E77A0"
-                                       FontFamily="OpenSansSemibold" Margin="0,8,12,0"/>
-                                <Label Grid.Row="3" Grid.Column="1"
-                                       Text="{Binding SelectedCustomer.Age}"
-                                       FontSize="14" FontFamily="OpenSansRegular" TextColor="#001861"/>
-
-                                <Label Grid.Row="4" Grid.Column="0"
-                                       Text="Endereço" FontSize="12" TextColor="#6E77A0"
-                                       FontFamily="OpenSansSemibold" Margin="0,8,12,0"/>
                                 
-                                <Label Grid.Row="4" Grid.Column="1"
-                                       Text="{Binding SelectedCustomer.Address}"
-                                       FontSize="14" FontFamily="OpenSansRegular" TextColor="#001861"
-                                       LineBreakMode="WordWrap"/>
-
-                                <Image Grid.Row="5" Grid.ColumnSpan="2"
-                                       Source="shapeinferiorroxo.png" Aspect="Fill"
-                                       Margin="0,70,0,0" HeightRequest="2" VerticalOptions="End"/>
-                            </Grid>
-                        </Border>
-
-                        <!-- btns AÇÕES RÁPIDAS -->
-                        <Border Grid.Row="0" Grid.Column="2"
-                                Background="Transparent" Stroke="Transparent" Padding="0" Margin="0">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="20"/>
-                            </Border.StrokeShape>
-
-                            <Grid VerticalOptions="End">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                       Text="~      Ações Rápidas      ~"
-                                       FontSize="14" FontFamily="OpenSansRegular" TextColor="#666D82" 
-                                       Margin="0,0,0,20" HorizontalOptions="Center" VerticalOptions="Center"/>
-
-                                <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                        Text="Incluir" FontSize="14" TextColor="White" BackgroundColor="#1857ae"
-                                        FontFamily="OpenSansSemibold" CornerRadius="10" Margin="0" Padding="0"
-                                        HeightRequest="40" WidthRequest="339" VerticalOptions="Center" HorizontalOptions="Center"
-                                        Command="{Binding NewCommand}"/>
-
-                                <Button Grid.Row="2" Grid.Column="0"
-                                        Text="Alterar" FontSize="14" TextColor="White" BackgroundColor="#1857ae"
-                                        FontFamily="OpenSansSemibold" CornerRadius="10" Margin="10" Padding="0" 
-                                        HeightRequest="40" WidthRequest="159" VerticalOptions="Center" HorizontalOptions="End"
-                                        Command="{Binding EditCommand}"/>
-
-                                <Button Grid.Row="2" Grid.Column="1"
-                                        Text="Excluir" FontSize="14" TextColor="White" BackgroundColor="#1857ae"
-                                        FontFamily="OpenSansSemibold" CornerRadius="10" Margin="10" Padding="0"
-                                        HeightRequest="40" WidthRequest="159" VerticalOptions="Center" HorizontalOptions="Start"
-                                        Command="{Binding DeleteCommand}"/>
                             </Grid>
                         </Border>
                     </Grid>
                 </Border>
             </Grid>
 
-            <!-- rodapé -->
+            <!-- Rodapé -->
             <BoxView Grid.Row="2" BackgroundColor="#001861" HeightRequest="30"/>
+            
         </Grid>
     </Grid>
 </ContentPage>
