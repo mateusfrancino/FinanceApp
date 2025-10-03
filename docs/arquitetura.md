@@ -14,23 +14,16 @@ Separar responsabilidades entre camadas (UI, ViewModel, Services, Helpers).
 
 🏗️ Estrutura em Camadas
 FinanceApp/
-│
+
 ├── Models/              # Estruturas de dados simples
-│   └── SeriesData.cs    # Representa uma série de preços simulada
-│
+
 ├── Services/            # Regras de negócio / simulação
-│   └── BrownianSimulator.cs   # Geração de movimento browniano
-│
+
 ├── ViewModels/          # Lógica de apresentação (MVVM)
-│   └── HomePageViewModel.cs  # Expõe propriedades, comandos e dados para a View
-│
+
 ├── Views/               # Interface com o usuário (UI)
-│   └── HomePage.xaml    # Tela principal com controles e Canvas (SkiaSharp)
-│
+
 ├── Helpers/             # Funções auxiliares reutilizáveis
-│   └── MathHelpers.cs   # Funções como NiceScale/NiceNumber para escalas de gráfico
-│
-└── FinanceApp.Tests/    # Projeto de testes (xUnit + Shouldly futuramente)
 
 🔄 Fluxo de Execução
 
